@@ -79,11 +79,15 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  SDL_Event e;
-  bool quit = false;
-
   // aquire resources
   SDL_Texture* tex_bg = loadTexture("res/background.png", renderer);
+  SDL_Texture* tex_ball = loadTexture("res/box.png", renderer);
+
+  // ...
+  SDL_Event e;
+  bool quit = false;
+  int ballX = 320 - 32;
+  int ballY = 240 - 32;
 
   while (!quit) {
 	// process input
@@ -95,6 +99,22 @@ int main(int argc, char** argv) {
           case SDLK_ESCAPE:
             quit = true;
             break;
+          case SDLK_LEFT:
+            if (ballX > 16)
+              ballX -= 8;
+            break;
+          case SDLK_RIGHT:
+            if (ballX < 560)
+              ballX += 8;
+            break;
+          case SDLK_UP:
+            if (ballY > 16)
+              ballY -= 8;
+            break;
+          case SDLK_DOWN:
+            if (ballY < 400)
+              ballY += 8;
+            break;
         }
       }
     }
@@ -104,6 +124,7 @@ int main(int argc, char** argv) {
 
 	// compose screen
     renderTexture(tex_bg, renderer, 0, 0);
+    renderTexture(tex_ball, renderer, ballX, ballY);
 
 	// update screen
     SDL_RenderPresent(renderer);
