@@ -1,5 +1,5 @@
 CXXFLAGS  =  
-LIBS      = -lSDL2
+LIBS      = -lSDL2 -lSDL2_image
 INCLUDE   = /usr/include/SDL2/
 PARAMETER = -std=c++11
 
