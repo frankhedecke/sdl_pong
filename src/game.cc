@@ -41,6 +41,17 @@ void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, SDL_Rect* 
   SDL_RenderCopy(ren, tex, clip, &dst);
 }
 
+void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, int w, int h, SDL_Rect* clip = nullptr) {
+
+  SDL_Rect dst;
+  dst.x = x;
+  dst.y = y;
+  dst.w = w;
+  dst.h = h;
+
+  SDL_RenderCopy(ren, tex, clip, &dst);
+}
+
 int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
 
   // init SDL
@@ -86,8 +97,10 @@ int main(int argc, char** argv) {
   // ...
   SDL_Event e;
   bool quit = false;
-  int ballX = 320 - 32;
-  int ballY = 240 - 32;
+  int ballX = 320 - 8;
+  int ballY = 240 - 8;
+  int paddleL = 16;
+  int paddleR = 16;
 
   while (!quit) {
 	// process input
@@ -95,25 +108,26 @@ int main(int argc, char** argv) {
       if (e.type == SDL_QUIT) {
         quit = true;
       } else if (e.type == SDL_KEYDOWN) {
+        //TODO multiple pressed keys do not work
         switch (e.key.keysym.sym) {
           case SDLK_ESCAPE:
             quit = true;
             break;
-          case SDLK_LEFT:
-            if (ballX > 16)
-              ballX -= 8;
+          case SDLK_w:
+            if (paddleL > 16)
+              paddleL -= 8;
             break;
-          case SDLK_RIGHT:
-            if (ballX < 560)
-              ballX += 8;
+          case SDLK_s:
+            if (paddleL < 336)
+              paddleL += 8;
             break;
           case SDLK_UP:
-            if (ballY > 16)
-              ballY -= 8;
+            if (paddleR > 16)
+              paddleR -= 8;
             break;
           case SDLK_DOWN:
-            if (ballY < 400)
-              ballY += 8;
+            if (paddleR < 336)
+              paddleR += 8;
             break;
         }
       }
@@ -124,7 +138,9 @@ int main(int argc, char** argv) {
 
 	// compose screen
     renderTexture(tex_bg, renderer, 0, 0);
-    renderTexture(tex_ball, renderer, ballX, ballY);
+    renderTexture(tex_ball, renderer, ballX, ballY, 16, 16);
+	renderTexture(tex_ball, renderer,  16, paddleL, 16, 128);
+	renderTexture(tex_ball, renderer, 608, paddleR, 16, 128);
 
 	// update screen
     SDL_RenderPresent(renderer);
