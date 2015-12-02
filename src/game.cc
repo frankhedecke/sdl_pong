@@ -146,6 +146,7 @@ int main(int argc, char** argv) {
     SDL_RenderPresent(renderer);
   }
 
+  cleanup(tex_bg, tex_ball);
   cleanup(renderer, window);
   SDL_Quit();
 
