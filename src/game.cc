@@ -1,56 +1,14 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+
 #include "cleanup.h"
+#include "textures.h"
 
 const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
 
 using namespace std;
-
-void logError(const string &msg){
-	cout << ">>> " << msg << " error" << std::endl;
-}
-
-void logSDLError(const string &msg){
-	cout << ">>> " << msg << " error: " << SDL_GetError() << std::endl;
-}
-
-SDL_Texture* loadTexture(const string &path, SDL_Renderer* ren){
-
-  SDL_Texture *texture = IMG_LoadTexture(ren, path.c_str());
-
-  if (texture == nullptr){
-    logSDLError("LoadTexture");
-  }
-  return texture;
-}
-
-void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, SDL_Rect* clip = nullptr) {
-
-  SDL_Rect dst;
-  dst.x = x;
-  dst.y = y;
-  if (clip != nullptr) {
-    dst.w = clip->w;
-    dst.h = clip->h;
-  } else {
-    SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
-  }
-
-  SDL_RenderCopy(ren, tex, clip, &dst);
-}
-
-void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, int w, int h, SDL_Rect* clip = nullptr) {
-
-  SDL_Rect dst;
-  dst.x = x;
-  dst.y = y;
-  dst.w = w;
-  dst.h = h;
-
-  SDL_RenderCopy(ren, tex, clip, &dst);
-}
 
 int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
 
@@ -132,17 +90,17 @@ int main(int argc, char** argv) {
         }
       }
     }
-
-	// delete screen
+   
+	  // delete screen
     SDL_RenderClear(renderer);
 
-	// compose screen
+	  // compose screen background
     renderTexture(tex_bg, renderer, 0, 0);
     renderTexture(tex_ball, renderer, ballX, ballY, 16, 16);
-	renderTexture(tex_ball, renderer,  16, paddleL, 16, 128);
-	renderTexture(tex_ball, renderer, 608, paddleR, 16, 128);
-
-	// update screen
+    renderTexture(tex_ball, renderer,  16, paddleL, 16, 128);
+    renderTexture(tex_ball, renderer, 608, paddleR, 16, 128);
+ 
+    // update screen
     SDL_RenderPresent(renderer);
   }
 
