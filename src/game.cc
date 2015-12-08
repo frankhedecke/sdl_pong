@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "ball.h"
 #include "cleanup.h"
 #include "textures.h"
 
@@ -50,10 +51,11 @@ int main(int argc, char** argv) {
 
   // aquire resources
   SDL_Texture* tex_bg = loadTexture("res/background.png", renderer);
-  SDL_Texture* tex_ball = loadTexture("res/box.png", renderer);
+  SDL_Texture* tex_box = loadTexture("res/box.png", renderer);
 
   // ...
   SDL_Event e;
+  ball* b = new ball(renderer);
   bool quit = false;
   int ballX = 320 - 8;
   int ballY = 240 - 8;
@@ -96,15 +98,18 @@ int main(int argc, char** argv) {
 
 	  // compose screen background
     renderTexture(tex_bg, renderer, 0, 0);
-    renderTexture(tex_ball, renderer, ballX, ballY, 16, 16);
-    renderTexture(tex_ball, renderer,  16, paddleL, 16, 128);
-    renderTexture(tex_ball, renderer, 608, paddleR, 16, 128);
- 
+    renderTexture(tex_box, renderer,  16, paddleL, 16, 128);
+    renderTexture(tex_box, renderer, 608, paddleR, 16, 128);
+
+    // render ball
+    b->update();
+    b->render();
+
     // update screen
     SDL_RenderPresent(renderer);
   }
 
-  cleanup(tex_bg, tex_ball);
+  cleanup(tex_bg, tex_box);
   cleanup(renderer, window);
   SDL_Quit();
 
