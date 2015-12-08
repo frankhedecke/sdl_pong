@@ -4,8 +4,8 @@ class ball {
 
   private:
     SDL_Texture* tex_ball;
-    int pos_x;
-    int pos_y;
+    float pos_x;
+    float pos_y;
     float speed_x;
     float speed_y;
     uint32_t last_tick;
