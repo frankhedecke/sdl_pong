@@ -61,6 +61,8 @@ int main(int argc, char** argv) {
   int ballY = 240 - 8;
   int paddleL = 16;
   int paddleR = 16;
+  // W, S, UP, DOWN
+  bool keys[4] = {false};
 
   while (!quit) {
 	// process input
@@ -68,35 +70,41 @@ int main(int argc, char** argv) {
       if (e.type == SDL_QUIT) {
         quit = true;
       } else if (e.type == SDL_KEYDOWN) {
-        //TODO multiple pressed keys do not work
-        switch (e.key.keysym.sym) {
-          case SDLK_ESCAPE:
-            quit = true;
-            break;
-          case SDLK_w:
-            if (paddleL > 16)
-              paddleL -= 8;
-            break;
-          case SDLK_s:
-            if (paddleL < 336)
-              paddleL += 8;
-            break;
-          case SDLK_UP:
-            if (paddleR > 16)
-              paddleR -= 8;
-            break;
-          case SDLK_DOWN:
-            if (paddleR < 336)
-              paddleR += 8;
-            break;
+        switch(e.key.keysym.sym) {
+          case SDLK_ESCAPE:  quit = true; break;
+          case SDLK_w:    keys[0] = true; break;
+          case SDLK_s:    keys[1] = true; break;
+          case SDLK_UP:   keys[2] = true; break;
+          case SDLK_DOWN: keys[3] = true; break;
+        }
+      } else if (e.type == SDL_KEYUP) {
+        switch(e.key.keysym.sym) {
+          case SDLK_w:    keys[0] = false; break;
+          case SDLK_s:    keys[1] = false; break;
+          case SDLK_UP:   keys[2] = false; break;
+          case SDLK_DOWN: keys[3] = false; break;
         }
       }
     }
+
+    // move paddles 
+    if (keys[0])
+      if (paddleL > 16)
+        paddleL -=4;
+    if (keys[1])
+      if (paddleL < 336)
+        paddleL +=4;
+    if (keys[2])
+      if (paddleR > 16)
+        paddleR -=4;
+    if (keys[3])
+      if (paddleR < 336)
+        paddleR +=4;
    
-	  // delete screen
+    // delete screen
     SDL_RenderClear(renderer);
 
-	  // compose screen background
+    // compose screen background
     renderTexture(tex_bg, renderer, 0, 0);
     renderTexture(tex_box, renderer,  16, paddleL, 16, 128);
     renderTexture(tex_box, renderer, 608, paddleR, 16, 128);
