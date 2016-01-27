@@ -9,12 +9,16 @@ using namespace std;
 ball::ball(SDL_Renderer* ren) {
   renderer = ren;
   tex_ball = loadTexture("res/box.png", renderer);
+  reset();
+  last_tick = SDL_GetTicks();
+}
+
+void ball::reset() {
   pos_x = 320;
   pos_y = 240;
   // movement per second
   speed_x = 90;
   speed_y = 30;
-  last_tick = SDL_GetTicks();
 }
 
 void ball::update() {
@@ -31,11 +35,33 @@ void ball::update() {
   pos_x += step_x;
   pos_y += step_y;
 
-  // update speed
-  if (pos_x >= 600 || pos_x <= 40)
-    speed_x *= -1;
-  if (pos_y >= 472 || pos_y <=  8)
+}
+
+int ball::who_scored(int paddleL, int paddleR) {
+
+  if (pos_x <= 40) {
+    if((pos_y - paddleL >= 0) && (pos_y - paddleL <= 128 ))
+      speed_x *= -1;
+    else {
+      reset();
+      return 1;
+    }
+  } 
+  
+  if (pos_x >= 600) {
+    if((pos_y - paddleR >= 0) && (pos_y - paddleR <= 128 ))
+      speed_x *= -1;
+    else {
+      reset();
+      return 2;
+    }
+  } 
+  
+  if (pos_y >= 472 || pos_y <=  8) {
     speed_y *= -1;
+  }
+
+  return 0;
 }
 
 void ball::render() {

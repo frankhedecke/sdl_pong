@@ -57,15 +57,15 @@ int main(int argc, char** argv) {
   SDL_Event e;
   ball* b = new ball(renderer);
   bool quit = false;
-  int ballX = 320 - 8;
-  int ballY = 240 - 8;
-  int paddleL = 16;
-  int paddleR = 16;
+  int paddleL = 176;
+  int paddleR = 176;
+  int scoreL = 0;
+  int scoreR = 0;
   // W, S, UP, DOWN
   bool keys[4] = {false};
 
   while (!quit) {
-	// process input
+  // process input
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT) {
         quit = true;
@@ -100,6 +100,7 @@ int main(int argc, char** argv) {
     if (keys[3])
       if (paddleR < 336)
         paddleR +=4;
+
    
     // delete screen
     SDL_RenderClear(renderer);
@@ -109,8 +110,22 @@ int main(int argc, char** argv) {
     renderTexture(tex_box, renderer,  16, paddleL, 16, 128);
     renderTexture(tex_box, renderer, 608, paddleR, 16, 128);
 
-    // render ball
+    // check for collisions
     b->update();
+    switch ( b->who_scored(paddleL, paddleR) ) {
+      case 0: break;
+      case 1: 
+        scoreR++;
+        cout << "Player Right scored and has now " << scoreR << " Points." << endl;
+        break;
+      case 2:
+        scoreL++;
+        cout << "Player Left scored and has now " << scoreL << " Points." << endl;
+        break;
+      default: break;
+    }
+
+    // render ball
     b->render();
 
     // update screen

@@ -13,6 +13,8 @@ class ball {
 
   public:
     ball(SDL_Renderer* renderer);
+    void reset();
     void update();
+    int who_scored(int paddleL, int paddleR);
     void render();
 };
