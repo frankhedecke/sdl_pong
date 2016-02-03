@@ -19,6 +19,12 @@ int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
     return 1;
   }
 
+  if (TTF_Init() != 0){
+    logSDLError("TTF_Init");
+    SDL_Quit();
+    return 1;
+  }
+
   window = SDL_CreateWindow("SDL Pong - press ESCAPE to exit", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
   if (window == nullptr) {
@@ -48,6 +54,10 @@ int main(int argc, char** argv) {
     logError("init_main");
     return 1;
   }
+
+  // layout text
+  SDL_Color text_color = {255, 255, 255, 255}; 
+  int text_size = 24;
 
   // aquire resources
   SDL_Texture* tex_bg = loadTexture("res/background.png", renderer);
@@ -101,7 +111,6 @@ int main(int argc, char** argv) {
       if (paddleR < 336)
         paddleR +=4;
 
-   
     // delete screen
     SDL_RenderClear(renderer);
 
@@ -116,14 +125,24 @@ int main(int argc, char** argv) {
       case 0: break;
       case 1: 
         scoreR++;
-        cout << "Player Right scored and has now " << scoreR << " Points." << endl;
         break;
       case 2:
         scoreL++;
-        cout << "Player Left scored and has now " << scoreL << " Points." << endl;
         break;
       default: break;
     }
+
+    // render score
+    string score;
+    score.append( to_string(scoreL) );
+    score.append( " : " );
+    score.append( to_string(scoreR) );
+
+    SDL_Texture* tex_score = renderText(score, "fonts/font.ttf", text_color, text_size, renderer);
+    // TODO calculate x-positon
+    renderTexture(tex_score, renderer, 300, 20);
+
+    cleanup(tex_score);
 
     // render ball
     b->render();
@@ -134,6 +153,7 @@ int main(int argc, char** argv) {
 
   cleanup(tex_bg, tex_box);
   cleanup(renderer, window);
+  TTF_Quit();
   SDL_Quit();
 
   return 0;
