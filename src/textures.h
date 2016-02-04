@@ -16,4 +16,6 @@ void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, SDL_Rect* 
 
 void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, int w, int h, SDL_Rect* clip = nullptr);
 
+void renderTextureCentered(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, SDL_Rect* clip = nullptr);
+
 SDL_Texture* renderText(const std::string &text, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer);

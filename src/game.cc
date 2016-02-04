@@ -139,8 +139,7 @@ int main(int argc, char** argv) {
     score.append( to_string(scoreR) );
 
     SDL_Texture* tex_score = renderText(score, "fonts/font.ttf", text_color, text_size, renderer);
-    // TODO calculate x-positon
-    renderTexture(tex_score, renderer, 300, 20);
+    renderTextureCentered(tex_score, renderer, 320, 20);
 
     cleanup(tex_score);
 

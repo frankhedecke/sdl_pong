@@ -44,6 +44,21 @@ void renderTexture(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, int w, int
   SDL_RenderCopy(ren, tex, clip, &dst);
 }
 
+void renderTextureCentered(SDL_Texture* tex, SDL_Renderer* ren, int x, int y, SDL_Rect* clip) {
+
+  SDL_Rect dst;
+  if (clip != nullptr) {
+    dst.w = clip->w;
+    dst.h = clip->h;
+  } else {
+    SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
+  }
+  dst.x = x - dst.w / 2;
+  dst.y = y - dst.h / 2;
+
+  SDL_RenderCopy(ren, tex, clip, &dst);
+}
+
 SDL_Texture* renderText(const std::string &text, const std::string &fontFile, SDL_Color color, int fontSize, SDL_Renderer *renderer) {
 
   TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
