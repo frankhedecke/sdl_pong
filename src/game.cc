@@ -125,9 +125,11 @@ int main(int argc, char** argv) {
       case 0: break;
       case 1: 
         scoreR++;
+        b->reset(-1.0);
         break;
       case 2:
         scoreL++;
+        b->reset(1.0);
         break;
       default: break;
     }

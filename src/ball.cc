@@ -13,12 +13,14 @@ ball::ball(SDL_Renderer* ren) {
   last_tick = SDL_GetTicks();
 }
 
-void ball::reset() {
+void ball::reset(float start_side) {
   pos_x = 320;
   pos_y = 240;
   // movement per second
-  speed_x = 90;
-  speed_y = 30;
+  speed_x = 120;
+  speed_y = 40;
+  speed_x *= start_side;
+  collision_factor = 1.0;
 }
 
 void ball::update() {
@@ -28,8 +30,8 @@ void ball::update() {
   last_tick = curr_tick;
 
   // calc pos
-  float step_x = speed_x * diff / 1000;
-  float step_y = speed_y * diff / 1000;
+  float step_x = speed_x * collision_factor * diff / 1000;
+  float step_y = speed_y * collision_factor * diff / 1000;
 
   // update pos
   pos_x += step_x;
@@ -40,24 +42,27 @@ void ball::update() {
 int ball::who_scored(int paddleL, int paddleR) {
 
   if (pos_x <= 40) {
-    if((pos_y - paddleL >= 0) && (pos_y - paddleL <= 128 ))
+    if((pos_y - paddleL >= 0) && (pos_y - paddleL <= 128 )) {
+      // collision left
       speed_x *= -1;
-    else {
-      reset();
+      inc_factor();
+    } else {
       return 1;
     }
   } 
   
   if (pos_x >= 600) {
-    if((pos_y - paddleR >= 0) && (pos_y - paddleR <= 128 ))
+    if((pos_y - paddleR >= 0) && (pos_y - paddleR <= 128 )) {
+      // collision right
       speed_x *= -1;
-    else {
-      reset();
+      inc_factor();
+    } else {
       return 2;
     }
   } 
   
   if (pos_y >= 472 || pos_y <=  8) {
+    // collision top or bottom
     speed_y *= -1;
   }
 
@@ -66,6 +71,11 @@ int ball::who_scored(int paddleL, int paddleR) {
 
 void ball::render() {
   renderTexture(tex_ball, renderer, (int) pos_x - 8, (int) pos_y - 8, 16, 16);
+}
+
+void ball::inc_factor() {
+  if (collision_factor < 2.0)
+    collision_factor += 0.1;
 }
 
 // TODO cleanup texture
