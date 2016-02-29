@@ -1,5 +1,9 @@
 #pragma once
 
+#include <SDL.h>
+#include "textures.h"
+#include "vector_screen.h"
+
 class ball {
 
   private:
@@ -10,13 +14,13 @@ class ball {
     float speed_y;
     float collision_factor;
     uint32_t last_tick;
-    SDL_Renderer* renderer;
+    vector_screen* screen;
 
   public:
-    ball(SDL_Renderer* renderer);
+    ball(vector_screen* screen);
     void reset(float start_side = 1.0);
     void update();
-    int who_scored(int paddleL, int paddleR);
+    int who_scored(float paddleL, float paddleR);
     void render();
   private:
     void inc_factor();

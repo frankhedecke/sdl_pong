@@ -5,13 +5,17 @@
 #include "ball.h"
 #include "cleanup.h"
 #include "textures.h"
+#include "vector_screen.h"
 
-const int SCREEN_WIDTH  = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH  = 800;
+const int SCREEN_HEIGHT = 600;
+// TODO const int for paddle dimensions
+
+// TODO delete pixel numbers in comments
 
 using namespace std;
 
-int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
+int init_main(SDL_Window* &window, vector_screen* &screen) {
 
   // init SDL
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -33,14 +37,8 @@ int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
     return 1;
   }
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-  if (renderer == nullptr) {
-    logSDLError("SDL_CreateRenderer");
-    cleanup(window);
-    SDL_Quit();
-    return 1;
-  }
+  screen = new vector_screen(window, 1.0, 0.75);
+  screen->update_res(SCREEN_WIDTH, SCREEN_HEIGHT);
 
   return 0;
 }
@@ -48,27 +46,24 @@ int init_main(SDL_Window* &window, SDL_Renderer* &renderer) {
 int main(int argc, char** argv) {
 
   SDL_Window *window = nullptr;
-  SDL_Renderer *renderer = nullptr;
+  vector_screen *screen = nullptr;
 
-  if (init_main(window, renderer) != 0) {
+  if (init_main(window, screen) != 0) {
     logError("init_main");
     return 1;
   }
 
-  // layout text
-  SDL_Color text_color = {255, 255, 255, 255}; 
   int text_size = 24;
 
-  // aquire resources
-  SDL_Texture* tex_bg = loadTexture("res/background.png", renderer);
-  SDL_Texture* tex_box = loadTexture("res/box.png", renderer);
+  SDL_Texture* tex_bg  = screen->load_Texture("res/background.png");
+  SDL_Texture* tex_box = screen->load_Texture("res/box.png");
 
   // ...
   SDL_Event e;
-  ball* b = new ball(renderer);
+  ball* b = new ball(screen);
   bool quit = false;
-  int paddleL = 176;
-  int paddleR = 176;
+  float paddleL = 0.275; // 176 = 240 - 64
+  float paddleR = 0.275; // 176 = 240 - 64
   int scoreL = 0;
   int scoreR = 0;
   // W, S, UP, DOWN
@@ -99,25 +94,25 @@ int main(int argc, char** argv) {
 
     // move paddles 
     if (keys[0])
-      if (paddleL > 16)
-        paddleL -=4;
+      if (paddleL > 0.025) // 16
+        paddleL -= 0.00625; // 4
     if (keys[1])
-      if (paddleL < 336)
-        paddleL +=4;
+      if (paddleL < 0.525) // 336
+        paddleL += 0.00625;
     if (keys[2])
-      if (paddleR > 16)
-        paddleR -=4;
+      if (paddleR > 0.025)
+        paddleR -= 0.00625;
     if (keys[3])
-      if (paddleR < 336)
-        paddleR +=4;
+      if (paddleR < 0.525)
+        paddleR += 0.00625;
 
-    // delete screen
-    SDL_RenderClear(renderer);
+    // clear screen
+    screen->clear();
 
     // compose screen background
-    renderTexture(tex_bg, renderer, 0, 0);
-    renderTexture(tex_box, renderer,  16, paddleL, 16, 128);
-    renderTexture(tex_box, renderer, 608, paddleR, 16, 128);
+    screen->render_Texture(0, 0, 1, 0.75, tex_bg);
+    screen->render_Texture(0.025, paddleL, 0.025, 0.2, tex_box);
+    screen->render_Texture(0.950, paddleR, 0.025, 0.2, tex_box);
 
     // check for collisions
     b->update();
@@ -140,8 +135,9 @@ int main(int argc, char** argv) {
     score.append( " : " );
     score.append( to_string(scoreR) );
 
-    SDL_Texture* tex_score = renderText(score, "fonts/font.ttf", text_color, text_size, renderer);
-    renderTextureCentered(tex_score, renderer, 320, 20);
+    SDL_Texture* tex_score = screen->loadText(score, text_size);
+    // TODO rework dimensions
+    screen->render_Texture(0.475, 0.03, 0.05, 0.03, tex_score);
 
     cleanup(tex_score);
 
@@ -149,11 +145,11 @@ int main(int argc, char** argv) {
     b->render();
 
     // update screen
-    SDL_RenderPresent(renderer);
+    screen->present();
   }
 
   cleanup(tex_bg, tex_box);
-  cleanup(renderer, window);
+  cleanup(window);
   TTF_Quit();
   SDL_Quit();
 
