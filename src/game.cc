@@ -4,14 +4,12 @@
 
 #include "ball.h"
 #include "cleanup.h"
-#include "textures.h"
 #include "vector_screen.h"
 
 const int SCREEN_WIDTH  = 800;
 const int SCREEN_HEIGHT = 600;
-// TODO const int for paddle dimensions
 
-// TODO delete pixel numbers in comments
+// TODO const int for paddle dimensions
 
 using namespace std;
 
@@ -37,8 +35,7 @@ int init_main(SDL_Window* &window, vector_screen* &screen) {
     return 1;
   }
 
-  screen = new vector_screen(window, 1.0, 0.75);
-  screen->update_res(SCREEN_WIDTH, SCREEN_HEIGHT);
+  screen = new vector_screen(window, SCREEN_WIDTH);
 
   return 0;
 }
@@ -62,8 +59,8 @@ int main(int argc, char** argv) {
   SDL_Event e;
   ball* b = new ball(screen);
   bool quit = false;
-  float paddleL = 0.275; // 176 = 240 - 64
-  float paddleR = 0.275; // 176 = 240 - 64
+  float paddleL = 0.275;
+  float paddleR = 0.275;
   int scoreL = 0;
   int scoreR = 0;
   // W, S, UP, DOWN
@@ -94,10 +91,10 @@ int main(int argc, char** argv) {
 
     // move paddles 
     if (keys[0])
-      if (paddleL > 0.025) // 16
-        paddleL -= 0.00625; // 4
+      if (paddleL > 0.025)
+        paddleL -= 0.00625;
     if (keys[1])
-      if (paddleL < 0.525) // 336
+      if (paddleL < 0.525)
         paddleL += 0.00625;
     if (keys[2])
       if (paddleR > 0.025)
