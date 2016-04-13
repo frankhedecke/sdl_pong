@@ -11,8 +11,6 @@
 const int SCREEN_WIDTH  = 1024;
 const int SCREEN_HEIGHT =  768;
 
-// TODO const int for paddle dimensions
-
 using namespace std;
 
 int init_main(SDL_Window* &window, vector_screen* &screen) {
@@ -61,29 +59,9 @@ int main(int argc, char** argv) {
   bool quit = false;
 
   while (!quit) {
-  // process input
-
-    /*
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      } else if (e.type == SDL_KEYDOWN) {
-        switch(e.key.keysym.sym) {
-          case SDLK_ESCAPE:  quit = true; break;
-        }
-      } else if (e.type == SDL_WINDOWEVENT) {
-         if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-           screen->update_res(e.window.data1);
-         }
-      }
-      //scene_pong->tick(&e);
-    } */
-
     scene_pong->tick(quit);
-
   }
 
-  //cleanup(tex_bg, tex_box);
   cleanup(window);
   TTF_Quit();
   SDL_Quit();

@@ -3,15 +3,14 @@
 #include "cleanup.h"
 #include "scene_pong.h"
 
-// TODO use this
 void Scene_Pong::input(SDL_Event* event) {
-
-  if (event == nullptr) return;
 
   if (event->type == SDL_KEYDOWN) {
     switch(event->key.keysym.sym) {
       case SDLK_w:    _keys[0] = true; break;
       case SDLK_s:    _keys[1] = true; break;
+      case SDLK_i:    _keys[2] = true; break;
+      case SDLK_k:    _keys[3] = true; break;
       case SDLK_UP:   _keys[2] = true; break;
       case SDLK_DOWN: _keys[3] = true; break;
     }
@@ -19,6 +18,8 @@ void Scene_Pong::input(SDL_Event* event) {
     switch(event->key.keysym.sym) {
       case SDLK_w:    _keys[0] = false; break;
       case SDLK_s:    _keys[1] = false; break;
+      case SDLK_i:    _keys[2] = false; break;
+      case SDLK_k:    _keys[3] = false; break;
       case SDLK_UP:   _keys[2] = false; break;
       case SDLK_DOWN: _keys[3] = false; break;
     }
@@ -94,32 +95,23 @@ void Scene_Pong::tick(bool &quit) {
 
   SDL_Event e;
   
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      } else if (e.type == SDL_KEYDOWN) {
-        switch(e.key.keysym.sym) {
-          case SDLK_w:    _keys[0] = true; break;
-          case SDLK_s:    _keys[1] = true; break;
-          case SDLK_UP:   _keys[2] = true; break;
-          case SDLK_DOWN: _keys[3] = true; break;
-          case SDLK_ESCAPE:   quit = true; break;
-        }
-      } else if (e.type == SDL_KEYUP) {
-        switch(e.key.keysym.sym) {
-          case SDLK_w:    _keys[0] = false; break;
-          case SDLK_s:    _keys[1] = false; break;
-          case SDLK_UP:   _keys[2] = false; break;
-          case SDLK_DOWN: _keys[3] = false; break;
-        }
-      } else if (e.type == SDL_WINDOWEVENT) {
-         if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-           _screen->update_res(e.window.data1);
-         }
+  // loop will be entered if an event occurrs
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      quit = true;
+    } else if (e.type == SDL_KEYDOWN) {
+      switch(e.key.keysym.sym) {
+        case SDLK_ESCAPE:   quit = true; break;
       }
+    } else if (e.type == SDL_WINDOWEVENT) {
+       if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+         _screen->update_res(e.window.data1);
+       }
     }
 
-  
+    input(&e);
+  }
+
   process();
   output();
 }
