@@ -15,6 +15,7 @@ void Scene_Pong::input(SDL_Event* event) {
       case SDLK_DOWN: _keys[3] = true; break;
     }
   } else if (event->type == SDL_KEYUP) {
+    // TODO check if buttons are pressed or already are released
     switch(event->key.keysym.sym) {
       case SDLK_w:    _keys[0] = false; break;
       case SDLK_s:    _keys[1] = false; break;
@@ -92,7 +93,6 @@ void Scene_Pong::tick() {
 
 void Scene_Pong::tick(bool &quit) {
 
-
   SDL_Event e;
   
   // loop will be entered if an event occurrs
@@ -101,8 +101,18 @@ void Scene_Pong::tick(bool &quit) {
       quit = true;
     } else if (e.type == SDL_KEYDOWN) {
       switch(e.key.keysym.sym) {
-        case SDLK_ESCAPE:   quit = true; break;
+        case SDLK_ESCAPE:
+             quit = true; break;
+        case SDLK_f:
+             _keys[4] = true; break;
       }
+    } else if (e.type == SDL_KEYUP) {
+      if (e.key.keysym.sym == SDLK_f && _keys[4]) {
+         _keys[4] = false;
+         _screen->toggle_fullscreen(); 
+         std::cout << "toggle fullscreen" << std::endl;
+      }
+
     } else if (e.type == SDL_WINDOWEVENT) {
        if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
          _screen->update_res(e.window.data1);
@@ -125,7 +135,7 @@ Scene_Pong::Scene_Pong(vector_screen* screen) : Scene(screen) {
   _paddleR = 0.275;
   _scoreL = 0;
   _scoreR = 0;
-  // W, S, UP, DOWN
-  for (int i = 0; i < 4; ++i)
+  // W, S, UP, DOWN, FULLSCREEN
+  for (int i = 0; i < 5; ++i)
     _keys[i] = false;
 }

@@ -3,7 +3,10 @@
 
 vector_screen::vector_screen(SDL_Window* window, uint base_res) : _base_res(base_res)  {
 
-  _renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  _window = window;
+  _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  // TODO check if window is fullscreen
+  _is_fullscreen = false;
 }
 
 vector_screen::~vector_screen() {
@@ -14,6 +17,22 @@ vector_screen::~vector_screen() {
 void vector_screen::update_res(uint base_res) {
 
   _base_res = base_res;
+}
+
+void vector_screen::toggle_fullscreen() {
+
+  Uint32 win_flags = 0;
+
+  if (_is_fullscreen) {
+    SDL_SetWindowFullscreen(_window, win_flags);
+    _is_fullscreen = false;
+  } else {
+    // set to fullscreen mode
+    win_flags = SDL_WINDOW_FULLSCREEN;
+    SDL_SetWindowFullscreen(_window, win_flags);
+    _is_fullscreen = true;
+  }
+
 }
 
 SDL_Texture* vector_screen::load_Texture(const std::string &path) {

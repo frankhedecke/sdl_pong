@@ -16,8 +16,8 @@ class Scene_Pong : public Scene {
     float _paddleR;
     int _scoreL;
     int _scoreR ;
-    // W, S, UP, DOWN
-    bool _keys[4];
+    // W, S, UP, DOWN, FULLSCREEN
+    bool _keys[5];
 
     void input(SDL_Event* event);
     void process();
