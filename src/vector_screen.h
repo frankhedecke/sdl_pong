@@ -9,6 +9,7 @@ class vector_screen {
 
   private:
     uint _base_res;
+    uint _windowed_base_res;
     SDL_Renderer* _renderer;
     SDL_Window* _window;
     // TODO use _window to check if fullscreen is set

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "cleanup.h"
 #include "scene_pong.h"
 
@@ -110,7 +108,6 @@ void Scene_Pong::tick(bool &quit) {
       if (e.key.keysym.sym == SDLK_f && _keys[4]) {
          _keys[4] = false;
          _screen->toggle_fullscreen(); 
-         std::cout << "toggle fullscreen" << std::endl;
       }
 
     } else if (e.type == SDL_WINDOWEVENT) {

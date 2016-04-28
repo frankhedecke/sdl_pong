@@ -1,9 +1,9 @@
 #include "textures.h"
 #include "vector_screen.h"
 
-vector_screen::vector_screen(SDL_Window* window, uint base_res) : _base_res(base_res)  {
+vector_screen::vector_screen(SDL_Window* window, uint base_res)
+: _window(window), _base_res(base_res), _windowed_base_res(base_res) {
 
-  _window = window;
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   // TODO check if window is fullscreen
   _is_fullscreen = false;
@@ -24,9 +24,14 @@ void vector_screen::toggle_fullscreen() {
   Uint32 win_flags = 0;
 
   if (_is_fullscreen) {
+    // set to windowed mode
     SDL_SetWindowFullscreen(_window, win_flags);
+    _base_res = _windowed_base_res;
+    SDL_SetWindowSize(_window, _base_res, _base_res / 4 * 3);
+    SDL_RenderSetScale(_renderer, 1.0, 1.0);
     _is_fullscreen = false;
   } else {
+    // TODO change res for fullscreen
     // set to fullscreen mode
     win_flags = SDL_WINDOW_FULLSCREEN;
     SDL_SetWindowFullscreen(_window, win_flags);
