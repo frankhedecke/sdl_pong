@@ -15,6 +15,12 @@ class vector_screen {
     uint _fs_offset_x;
     uint _fs_offset_y;
     // window mode
+    uint _res_x;
+    uint _res_y;
+    uint _res;
+    uint _offset_x;
+    uint _offset_y;
+    // window mode old
     uint _windowed_base_res;
     uint _windowed_bup_res;
     // other
@@ -26,7 +32,7 @@ class vector_screen {
   public:
     vector_screen(SDL_Window* window, uint res_x = 640);
     ~vector_screen();
-    void update_res(uint base_res);
+    void update_res();
     void toggle_fullscreen();
     SDL_Texture* load_Texture(const std::string &path);
     SDL_Texture* loadText(const std::string &text, int font_size);

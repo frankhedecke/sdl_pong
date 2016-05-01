@@ -112,7 +112,7 @@ void Scene_Pong::tick(bool &quit) {
 
     } else if (e.type == SDL_WINDOWEVENT) {
        if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-         _screen->update_res(e.window.data1);
+         _screen->update_res();
        }
     }
 

@@ -3,6 +3,7 @@
 #include "vector_screen.h"
 
 // TODO problem: ratio 4 : 3 is hardcoded
+// TODO refactor everything
 
 vector_screen::vector_screen(SDL_Window* window, uint res_x)
 : _window(window), _windowed_base_res(res_x), _windowed_bup_res(res_x) {
@@ -16,6 +17,7 @@ vector_screen::vector_screen(SDL_Window* window, uint res_x)
   _fs_res = 0;
   _fs_offset_x = 0;
   _fs_offset_y = 0;
+  // TODO move to extra function
   if ( (_fs_res_x * 3) == (_fs_res_y * 4) ) {
     _fs_res = _fs_res_x;
   } else if ( (_fs_res_x * 3) > (_fs_res_y * 4) ) {
@@ -26,7 +28,25 @@ vector_screen::vector_screen(SDL_Window* window, uint res_x)
     _fs_offset_y = (_fs_res_y - _fs_res_x * 3 / 4) / 2 ;
   }
   std::cout << "fullscreen base res: " << _fs_res << " with offsets: " << _fs_offset_x << " + " << _fs_offset_y<< std::endl;
-  // TODO calculate window parameters
+  // calculate window parameters
+  int w, h = 0;
+  SDL_GetWindowSize(_window, &w, &h);
+  _res_x = w;
+  _res_y = h;
+  _res = 0;
+  _offset_x = 0;
+  _offset_y = 0;
+  if ( (_res_x * 3) == (_res_y * 4) ) {
+    _res = _res_x;
+  } else if ( (_res_x * 3) > (_res_y * 4) ) {
+    _res = _res_y * 4 / 3;
+    _offset_x = (_res_x - _res) / 2;
+  } else {
+    _res = _res_x;
+    _offset_y = (_res_y - _res_x * 3 / 4) / 2 ;
+  }
+
+  std::cout << "window base res: " << _res << " with offsets: " << _offset_x << " + " << _offset_y<< std::endl;
 
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   // TODO check if window is fullscreen
@@ -38,12 +58,26 @@ vector_screen::~vector_screen() {
   SDL_DestroyRenderer(_renderer);
 }
 
-void vector_screen::update_res(uint base_res) {
-
+void vector_screen::update_res() {
   // the _windowed_base_res changes if fullscreen is entered
   // but changes back if fullscreen is left
   // after changing to fullscreen and back the resolution is different
-  _windowed_base_res = base_res;
+  int w, h = 0;
+  SDL_GetWindowSize(_window, &w, &h);
+  _res_x = w;
+  _res_y = h;
+  _res = 0;
+  _offset_x = 0;
+  _offset_y = 0;
+  if ( (_res_x * 3) == (_res_y * 4) ) {
+    _res = _res_x;
+  } else if ( (_res_x * 3) > (_res_y * 4) ) {
+    _res = _res_y * 4 / 3;
+    _offset_x = (_res_x - _res) / 2;
+  } else {
+    _res = _res_x;
+    _offset_y = (_res_y - _res_x * 3 / 4) / 2 ;
+  }
 }
 
 void vector_screen::toggle_fullscreen() {
@@ -98,7 +132,9 @@ void vector_screen::render_Texture(float x, float y, float dim_x, float dim_y, S
     off_x = _fs_offset_x;
     off_y = _fs_offset_y;
   } else {
-    res = _windowed_base_res;
+    res = _res;
+    off_x = _offset_x;
+    off_y = _offset_y;
   }
 
   int pix_x = x * res + off_x;
