@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -36,9 +35,7 @@ int init_main(SDL_Window* &window, vector_screen* &screen) {
     return 1;
   }
 
-  int width = 0;
-  SDL_GetWindowSize(window, &width, nullptr);
-  screen = new vector_screen(window, width);
+  screen = new vector_screen(window);
 
   return 0;
 }

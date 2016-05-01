@@ -18,19 +18,17 @@ class vector_screen {
     uint _res_x;
     uint _res_y;
     uint _res;
+    uint _bup_res;
     uint _offset_x;
     uint _offset_y;
-    // window mode old
-    uint _windowed_base_res;
-    uint _windowed_bup_res;
     // other
     SDL_Renderer* _renderer;
     SDL_Window* _window;
-    // TODO use _window to check if fullscreen is set
     bool _is_fullscreen;
+    void param(uint res_x, uint res_y, uint* base_res, uint* offset_x, uint* offset_y);
 
   public:
-    vector_screen(SDL_Window* window, uint res_x = 640);
+    vector_screen(SDL_Window* window);
     ~vector_screen();
     void update_res();
     void toggle_fullscreen();
