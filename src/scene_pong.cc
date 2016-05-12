@@ -83,11 +83,12 @@ void Scene_Pong::output() {
   _screen->present();
 }
 
+/* TODO delete
 void Scene_Pong::tick() {
 
   process();
   output();
-}
+} */
 
 void Scene_Pong::tick(bool &quit) {
 
@@ -123,11 +124,13 @@ void Scene_Pong::tick(bool &quit) {
   output();
 }
 
-Scene_Pong::Scene_Pong(vector_screen* screen) : Scene(screen) {
+// TODO delete
+// Scene_Pong::Scene_Pong(vector_screen* screen) : Scene(screen) {
+Scene_Pong::Scene_Pong(Scene_Manager* manager) : Scene(manager) {
 
-  _tex_bg  = screen->load_Texture("res/background.png");
-  _tex_box = screen->load_Texture("res/box.png");
-  _ball = new ball(screen);
+  _tex_bg  = _screen->load_Texture("res/background.png");
+  _tex_box = _screen->load_Texture("res/box.png");
+  _ball = new ball(_screen);
   _paddleL = 0.275;
   _paddleR = 0.275;
   _scoreL = 0;

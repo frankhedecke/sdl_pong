@@ -3,7 +3,7 @@
 
 #include "ball.h"
 #include "cleanup.h"
-#include "scene.h"
+#include "scene_manager.h"
 #include "scene_pong.h"
 #include "vector_screen.h"
 
@@ -26,6 +26,7 @@ int init_main(SDL_Window* &window, vector_screen* &screen) {
     return 1;
   }
 
+  // TODO move window creation to vector screen
   int win_flags = SDL_WINDOW_SHOWN + SDL_WINDOW_RESIZABLE;
   window = SDL_CreateWindow("SDL Pong - press ESCAPE to exit", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, win_flags);
 
@@ -44,6 +45,7 @@ int main(int argc, char** argv) {
 
   SDL_Window *window = nullptr;
   vector_screen *screen = nullptr;
+  Scene_Manager *manager = nullptr;
   Scene_Pong *scene_pong = nullptr;
 
   if (init_main(window, screen) != 0) {
@@ -51,7 +53,8 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  scene_pong = new Scene_Pong(screen);
+  manager = new Scene_Manager(screen);
+  scene_pong = new Scene_Pong(manager);
 
   bool quit = false;
 

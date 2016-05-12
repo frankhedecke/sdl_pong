@@ -1,22 +1,18 @@
 #pragma once
 
-#include <SDL.h>
-
+#include "scene_manager.h"
 #include "vector_screen.h"
+
+class Scene_Manager;
 
 class Scene {
 
   protected:
     vector_screen* _screen;
-
-  private:
-    void input(SDL_Event* event);
-    void process();
-    void output();
+    Scene_Manager* _manager;
 
   public:
-    Scene(vector_screen* screen);
+    Scene(Scene_Manager* manager);
     ~Scene();
-    void tick(SDL_Event* event);
-    void tick();
+    virtual void tick(bool &quit) = 0;
 };

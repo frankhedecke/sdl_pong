@@ -24,9 +24,10 @@ class Scene_Pong : public Scene {
     void output();
 
   public:
-    Scene_Pong(vector_screen* screen);
+    Scene_Pong(Scene_Manager* manager);
+    // TODO delete
+    // Scene_Pong(vector_screen* screen);
     ~Scene_Pong();
-    void tick();
-	// TODO remove
+    // void tick();
     void tick(bool &quit);
 };

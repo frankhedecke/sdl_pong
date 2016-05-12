@@ -1,21 +1,9 @@
 #include "scene.h"
 
-void Scene::input(SDL_Event* event) {}
-void Scene::process() {}
-void Scene::output() {}
-void Scene::tick(SDL_Event* event) {
+Scene::Scene(Scene_Manager* manager) 
+: _manager(manager) {
 
-  input(event);
-  process();
-  output();
+  _screen = _manager->get_vector_screen();
 }
-
-void Scene::tick() {
-
-  process();
-  output();
-}
-
-Scene::Scene(vector_screen* screen) : _screen(screen) {}
 
 Scene::~Scene() {}
