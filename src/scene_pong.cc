@@ -83,13 +83,6 @@ void Scene_Pong::output() {
   _screen->present();
 }
 
-/* TODO delete
-void Scene_Pong::tick() {
-
-  process();
-  output();
-} */
-
 void Scene_Pong::tick(bool &quit) {
 
   SDL_Event e;
@@ -124,8 +117,6 @@ void Scene_Pong::tick(bool &quit) {
   output();
 }
 
-// TODO delete
-// Scene_Pong::Scene_Pong(vector_screen* screen) : Scene(screen) {
 Scene_Pong::Scene_Pong(Scene_Manager* manager) : Scene(manager) {
 
   _tex_bg  = _screen->load_Texture("res/background.png");
