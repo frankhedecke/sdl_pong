@@ -4,7 +4,7 @@
 #include "ball.h"
 #include "cleanup.h"
 #include "scene_manager.h"
-#include "scene_pong.h"
+#include "scene_intro.h"
 #include "vector_screen.h"
 
 const int SCREEN_WIDTH  = 1024;
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
   SDL_Window *window = nullptr;
   vector_screen *screen = nullptr;
   Scene_Manager *manager = nullptr;
-  Scene_Pong *scene_pong = nullptr;
+  Scene_Intro *scene_intro = nullptr;
 
   if (init_main(window, screen) != 0) {
     logError("init_main");
@@ -54,12 +54,13 @@ int main(int argc, char** argv) {
   }
 
   manager = new Scene_Manager(screen);
-  scene_pong = new Scene_Pong(manager);
+  scene_intro = new Scene_Intro(manager);
+  manager->load_scene(scene_intro);
 
   bool quit = false;
 
   while (!quit) {
-    scene_pong->tick(quit);
+    manager->tick(quit);
   }
 
   cleanup(window);

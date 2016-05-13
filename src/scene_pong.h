@@ -4,7 +4,7 @@
 
 #include "ball.h"
 #include "scene.h"
-#include "vector_screen.h"
+#include "scene_manager.h"
 
 class Scene_Pong : public Scene {
 
