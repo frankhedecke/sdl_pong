@@ -21,7 +21,7 @@ class ball {
     ball(vector_screen* screen);
     void reset(float start_side = 1.0);
     void update();
-    int who_scored(float paddleL, float paddleR);
+    int check_collision_score(float paddleL, float paddleR);
     void render();
   private:
     void inc_factor();

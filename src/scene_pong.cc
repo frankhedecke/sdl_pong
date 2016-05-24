@@ -34,23 +34,35 @@ void ball::update() {
 
 }
 
-int ball::who_scored(float paddleL, float paddleR) {
+int ball::check_collision_score(float paddleL, float paddleR) {
 
   if (pos_x <= 0.0625) { // 40
-    if((pos_y - paddleL >= 0) && (pos_y - paddleL <= 0.2 )) { // 128
+    if ((pos_y - paddleL >= 0) && (pos_y - paddleL <= 0.2 )) { // 128
       // collision left
-      speed_x *= -1;
+      if (speed_x < 0) 
+        speed_x *= -1;
       inc_factor();
+      if (pos_y - paddleL <= 0.05) { // ball hits upper quarter
+        speed_y -= 0.02;
+      } else if (pos_y - paddleL >= 0.15) { // ball hits lower quarter
+        speed_y += 0.02;
+      }
     } else {
       return 1;
     }
   } 
   
   if (pos_x >= 0.9375) { // 600
-    if((pos_y - paddleR >= 0) && (pos_y - paddleR <= 0.2 )) { // 128
+    if ((pos_y - paddleR >= 0) && (pos_y - paddleR <= 0.2 )) { // 128
       // collision right
-      speed_x *= -1;
+      if (speed_x > 0) 
+        speed_x *= -1;
       inc_factor();
+      if (pos_y - paddleL <= 0.05) { // ball hits upper quarter
+        speed_y -= 0.02;
+      } else if (pos_y - paddleL >= 0.15) { // ball hits lower quarter
+        speed_y += 0.02;
+      }
     } else {
       return 2;
     }
@@ -117,9 +129,11 @@ void Scene_Pong::process() {
     if (_paddleR < 0.525)
       _paddleR += 0.00625;
 
-  // check for collisions
+  // move ball
   _ball->update();
-  switch ( _ball->who_scored(_paddleL, _paddleR) ) {
+
+  // check for collisions
+  switch ( _ball->check_collision_score(_paddleL, _paddleR) ) {
     case 0: break;
     case 1: 
       _scoreR++;
