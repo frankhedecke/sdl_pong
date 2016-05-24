@@ -1,10 +1,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "ball.h"
 #include "cleanup.h"
 #include "scene_manager.h"
 #include "scene_intro.h"
+#include "textures.h"
 #include "vector_screen.h"
 
 const int SCREEN_WIDTH  = 1024;
@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
+  // TODO move vector screen creation to scene_manager
   manager = new Scene_Manager(screen);
   scene_intro = new Scene_Intro(manager);
   manager->load_scene(scene_intro);
