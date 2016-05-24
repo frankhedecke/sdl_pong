@@ -7,6 +7,8 @@
 
 class ball {
 
+  // TODO rename private members
+
   private:
     SDL_Texture* tex_ball;
     float pos_x;
@@ -31,7 +33,7 @@ class Scene_Pong : public Scene {
 
   private:
     SDL_Texture* _tex_bg;
-    SDL_Texture* _tex_box;
+    SDL_Texture* _tex_paddle;
     ball* _ball;
     float _paddleL;
     float _paddleR;

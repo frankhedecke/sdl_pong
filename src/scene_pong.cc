@@ -3,7 +3,7 @@
 
 ball::ball(vector_screen* scr) {
   screen = scr;
-  tex_ball = screen->load_Texture("res/box.png");
+  tex_ball = screen->load_Texture("res/ball.png");
   reset();
   last_tick = SDL_GetTicks();
 }
@@ -151,8 +151,8 @@ void Scene_Pong::process() {
 
   // compose screen background
   _screen->render_Texture(0    ,        0,     1, 0.75, _tex_bg);
-  _screen->render_Texture(0.025, _paddleL, 0.025,  0.2, _tex_box);
-  _screen->render_Texture(0.950, _paddleR, 0.025,  0.2, _tex_box);
+  _screen->render_Texture(0.025, _paddleL, 0.025,  0.2, _tex_paddle);
+  _screen->render_Texture(0.950, _paddleR, 0.025,  0.2, _tex_paddle);
 
   // render score
   std::string score;
@@ -210,7 +210,7 @@ void Scene_Pong::tick(bool &quit) {
 Scene_Pong::Scene_Pong(Scene_Manager* manager) : Scene(manager) {
 
   _tex_bg  = _screen->load_Texture("res/background.png");
-  _tex_box = _screen->load_Texture("res/box.png");
+  _tex_paddle = _screen->load_Texture("res/paddle.png");
   _ball = new ball(_screen);
   _paddleL = 0.275;
   _paddleR = 0.275;
