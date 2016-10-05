@@ -13,6 +13,12 @@ class Scene_Intro : public Scene {
     SDL_Texture* _tex_name;
     SDL_Texture* _tex_instr_left;
     SDL_Texture* _tex_instr_right;
+    // FULLSCREEN
+    bool _keys[1];
+
+    void input(SDL_Event* event);
+    void process();
+    void output();
   public:
     Scene_Intro(Scene_Manager* manager);
     ~Scene_Intro();
